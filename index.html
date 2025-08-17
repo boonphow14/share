@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-    <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none; /* remove border */
-    }
-  </style>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบหารเงิน</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบหารเงิน</title>
+  <link rel="icon" type="image/png" href="https://images.contentstack.io/v3/assets/blt14bf33c6d60ccc19/blte9db1fccc1a9a034/6191284c00783f138785e8d5/dec21-update-bussiness6-05.png">
+  <link rel="manifest" href="manifest.json">
 </head>
-<body>
-  <iframe src="https://script.google.com/macros/s/AKfycbydzexMLRcot49JYTqzvKXQRHM9QsdtTLH9cmGH-aLgkZy_cx4Sod-tzcU8PSC_wvUg/exec"></iframe>
+<body style="margin:0; padding:0; height:100%;">
+  <iframe src="https://script.google.com/macros/s/AKfycbydzexMLRcot49JYTqzvKXQRHM9QsdtTLH9cmGH-aLgkZy_cx4Sod-tzcU8PSC_wvUg/exec"
+          style="width:100%; height:100%; border:none;"></iframe>
+
+  <!-- ปุ่มติดตั้ง -->
+  <button id="installBtn" style="position:fixed; bottom:20px; right:20px; padding:10px 20px; font-size:16px; border:none; background:#e74c3c; color:white; border-radius:8px; display:none;">
+    📲 ติดตั้งแอพ
+  </button>
+
+  <script>
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+
+    // Show install button
+    let deferredPrompt;
+    const installBtn = document.getElementById("installBtn");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = "block";
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted") {
+          installBtn.style.display = "none";
+        }
+        deferredPrompt = null;
+      }
+    });
+  </script>
 </body>
 </html>
-
